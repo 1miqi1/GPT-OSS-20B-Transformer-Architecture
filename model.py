@@ -261,7 +261,8 @@ class GPT(nn.Module):
         loss = None
         if targets is not None:
             # Reshape for cross-entropy: (batch_size * seq_len, vocab_size)
-            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+            # Note: ignore_index can be set to -100 to ignore padding tokens if needed
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
         
         return logits, loss
     

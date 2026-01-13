@@ -25,7 +25,11 @@ class TextDataset(Dataset):
     """
     
     def __init__(self, tokens, seq_len):
-        self.tokens = tokens
+        # Convert to tensor once during initialization for efficiency
+        if not isinstance(tokens, torch.Tensor):
+            self.tokens = torch.tensor(tokens, dtype=torch.long)
+        else:
+            self.tokens = tokens
         self.seq_len = seq_len
         
     def __len__(self):
@@ -38,9 +42,10 @@ class TextDataset(Dataset):
         For language modeling, the target is the input shifted by one position.
         The model learns to predict the next token given the previous tokens.
         """
+        # Use tensor slicing for efficiency - no conversion overhead
         x = self.tokens[idx:idx + self.seq_len]
         y = self.tokens[idx + 1:idx + self.seq_len + 1]
-        return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
+        return x, y
 
 
 def create_sample_data(vocab_size=50257, num_tokens=10000):
@@ -54,9 +59,9 @@ def create_sample_data(vocab_size=50257, num_tokens=10000):
         num_tokens: Number of tokens to generate
         
     Returns:
-        List of token indices
+        Tensor of token indices
     """
-    return torch.randint(0, vocab_size, (num_tokens,)).tolist()
+    return torch.randint(0, vocab_size, (num_tokens,))
 
 
 def train_epoch(model, dataloader, optimizer, device, clip_grad=1.0):
