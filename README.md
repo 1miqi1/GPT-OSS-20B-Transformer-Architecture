@@ -17,7 +17,7 @@ During class discussions, we explored Transformer blocks and their significance 
 
 ## Files
 
-* `Homework3.ipynb` – Main notebook containing implementation, experiments, and plots.
+* `hw_3_gpt_oss_student.ipynb` – Main notebook containing implementation, experiments, and plots.
 * `README.md` – This file with an overview of the project.
 
 ## Key Features
